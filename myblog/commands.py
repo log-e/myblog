@@ -1,6 +1,7 @@
+import click
+
 from myblog import app, db
 from .models import User, Article
-import click
 
 @app.cli.command()
 def forge():
@@ -25,7 +26,7 @@ def initdb(drop):
 def admin(username, password):
     """ create an admin account"""
     db.create_all()
-    user = db.query.first()
+    user = User.query.first()
     if user is not None:
         click.echo("updating user...")
         user.username = username

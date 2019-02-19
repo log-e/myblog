@@ -1,11 +1,6 @@
 from myblog import app
-
+from flask import render_template
 
 @app.errorhandler(404)
 def handle_404(e):
-    pass
-
-
-@app.errorhandler(503)
-def handle_503(e):
-    pass
+    return render_template('errors/404.html'), 404
