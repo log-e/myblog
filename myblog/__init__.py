@@ -27,4 +27,4 @@ def inject_user():
     return dict(user=user)
 
 
-from . import models, views, errors, commands
+from myblog import views, errors, commands

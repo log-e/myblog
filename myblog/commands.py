@@ -1,12 +1,24 @@
 import click
-
+from faker import Faker
+from faker.providers import lorem
 from myblog import app, db
 from .models import User, Article
+import datetime
 
 @app.cli.command()
-def forge():
+@click.option("--count", help = "the number of ariticle you gernerate", type = click.INT)
+def forge(count):
     """ fake data to database """
     db.create_all()
+    fake = Faker('zh_CN')
+    fake.add_provider(lorem)
+    title_list = fake.sentences(nb=100)
+    for i in range(0,count):
+        article = Article(title=title_list[i], content = fake.text(3000), time = datetime.datetime.now())
+        db.session.add(article)
+    click.echo("created %d articles" % count)
+    db.session.commit()
+    click.echo(".Done")
     pass
 
 
@@ -35,5 +47,6 @@ def admin(username, password):
         click.echo("Creating user...")
         user = User(username = username, name = 'Admin')
         user.set_password(password)
+        db.session.add(user)
     db.session.commit()
     click.echo('Done')

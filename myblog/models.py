@@ -1,6 +1,5 @@
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash\
-
+from werkzeug.security import generate_password_hash, check_password_hash
 from myblog import db
 
 class User(db.Model, UserMixin):
@@ -18,7 +17,7 @@ class User(db.Model, UserMixin):
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(20))
-    datetime = db.Column(db.DateTime)
+    time = db.Column(db.DateTime)
     content = db.Column(db.Text)
     #可以加入统计字数的函数比如def count啥的
 

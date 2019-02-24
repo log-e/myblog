@@ -1,4 +1,4 @@
-from myblog import app
+from myblog import app, db
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, Article
@@ -7,7 +7,8 @@ from .models import User, Article
 @app.route('/')
 def index():
     #todo
-    return render_template('index.html')
+    allarticle = Article.query.all()
+    return render_template('index.html', allarticle = allarticle)
 
 
 @app.route('/article/delete/<int:article_id>')
@@ -26,13 +27,21 @@ def view_article(article_id):
     return render_template('article.html', article = article)
 
 
-@app.route('/article/edit/<int:article_id>')
+@app.route('/article/edit/<int:article_id>', methods = ['GET', 'POST'])
 @login_required
 def edit_article(article_id):
     """ 编辑已有的文章 """
-    #todo
     article = Article.query.get(article_id)
-    pass
+    if request.method == "POST":
+        title = request.form['title']
+        content = request.form['content']
+        article.title = title
+        article.content = content
+        db.session.commit()
+        flash("edit successfully!")
+        allarticle = Article.query.all()
+        return redirect(url_for("admin"))
+    return render_template("edit.html", article = article)
 
 
 @app.route('/article/post', methods=['GET','POST'])
@@ -56,8 +65,8 @@ def post_article():
 @login_required
 def admin():
     """ 管理员页面，可以编辑旧文章，发布新文章，删除旧文章 """
-    #todo
-    return render_template('admin.html')
+    allarticle = Article.query.all()
+    return render_template('admin.html', allarticle = allarticle)
 
 
 @app.route('/login', methods=['GET', 'POST'])

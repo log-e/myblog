@@ -4,10 +4,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>I Love Flask</title>
+    {% block style %}{% endblock %}
 </head>
 <body>
     <h1>I Love Flask</h1>
-    {% block body %}
+    {% block head %}
+        {% for message in get_flashed_messages() %}
+        <div>{{ message }}</div>
+        {% endfor %}
     {% endblock %}
+    {% block content %}{% endblock %}
+    {% block script %}{% endblock %}
 </body>
 </html>
